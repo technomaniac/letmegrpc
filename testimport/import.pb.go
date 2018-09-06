@@ -6,7 +6,7 @@ package testimport
 import proto "github.com/gogo/protobuf/proto"
 import fmt "fmt"
 import math "math"
-import serve "github.com/gogo/letmegrpc/letmetestserver/serve"
+import serve "github.com/technomaniac/letmegrpc/letmetestserver/serve"
 
 import (
 	context "golang.org/x/net/context"

@@ -27,7 +27,7 @@ syntax = "proto3";
 
 package testimport;
 
-import "github.com/gogo/letmegrpc/letmetestserver/serve/serve.proto";
+import "github.com/technomaniac/letmegrpc/letmetestserver/serve/serve.proto";
 
 service OtherLabel {
 	rpc Produce(serve.Album) returns (serve.Album);

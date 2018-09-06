@@ -12,7 +12,7 @@ import google_golang_org_grpc "google.golang.org/grpc"
 import proto "github.com/gogo/protobuf/proto"
 import fmt "fmt"
 import math "math"
-import serve "github.com/gogo/letmegrpc/letmetestserver/serve"
+import serve "github.com/technomaniac/letmegrpc/letmetestserver/serve"
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal
