@@ -26,7 +26,7 @@
 package main
 
 import (
-	"github.com/gogo/letmegrpc/html"
+	"github.com/techomaniac/letmegrpc/html"
 	"github.com/gogo/protobuf/vanity/command"
 )
 

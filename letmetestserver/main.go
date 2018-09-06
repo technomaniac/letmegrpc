@@ -31,7 +31,7 @@ import (
 	"log"
 	"net"
 
-	"github.com/gogo/letmegrpc/letmetestserver/serve"
+	"github.com/technomaniac/letmegrpc/letmetestserver/serve"
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
 )
