@@ -29,8 +29,9 @@ import (
 	"strings"
 
 	"github.com/gogo/letmegrpc/form"
-	descriptor "github.com/gogo/protobuf/protoc-gen-gogo/descriptor"
+	"github.com/gogo/protobuf/protoc-gen-gogo/descriptor"
 	"github.com/gogo/protobuf/protoc-gen-gogo/generator"
+	"fmt"
 )
 
 type html struct {
@@ -60,6 +61,7 @@ func (p *html) typeName(name string) string {
 }
 
 const errString = `w.Write([]byte("<div class=\"alert alert-danger\" role=\"alert\">" + err.Error() + "</div>"))`
+const authToken = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1MzY4MjY4NDksImlzcyI6ImlvLnpvbmljLmF1dGgiLCJVc2VySUQiOiJjYzUyZjlmYy1mYTgxLTRlODktOGJlMy00Y2M5ZTA2NDg4YzgifQ.h1wqW3mtCauFjpkGjoFbkLf1N9VL4ZNedPoMwja7gTs`
 
 func (p *html) writeError(eof string) {
 	p.P(`if err != nil {`)
@@ -112,6 +114,7 @@ func (p *html) Generate(file *generator.FileDescriptor) {
 	p.strconvPkg = p.NewImport("strconv")
 	logPkg := p.NewImport("log")
 	grpcPkg := p.NewImport("google.golang.org/grpc")
+	metadataPkg := p.NewImport("google.golang.org/grpc/metadata")
 
 	p.P(`var DefaultHtmlStringer = func(req, resp interface{}) ([]byte, error) {`)
 	p.In()
@@ -200,15 +203,19 @@ func (p *html) Generate(file *generator.FileDescriptor) {
 			p.P(`w.Write([]byte(Form`, servName, `_`, generator.CamelCase(m.GetName()), `))`)
 			p.P(`if someValue {`)
 			p.In()
+
+			p.P(`ctx:=`, `(`, contextPkg.Use(), `.Background()`)
+			p.P(`ctx=`, metadataPkg.Use(), fmt.Sprintf(`.AppendToOutgoingContext(ctx, "Authorization", "X-Token %s")`, authToken))
+
 			if !m.GetClientStreaming() {
 				if !m.GetServerStreaming() {
-					p.P(`reply, err := this.client.`, generator.CamelCase(m.GetName()), `(`, contextPkg.Use(), `.Background(), msg)`)
+					p.P(`reply, err := this.client.`, generator.CamelCase(m.GetName()), `(ctx, msg)`)
 					p.writeError(errString)
 					p.P(`out, err := this.stringer(msg, reply)`)
 					p.writeError(errString)
 					p.P(`w.Write(out)`)
 				} else {
-					p.P(`down, err := this.client.`, generator.CamelCase(m.GetName()), `(`, contextPkg.Use(), `.Background(), msg)`)
+					p.P(`down, err := this.client.`, generator.CamelCase(m.GetName()), `(ctx, msg)`)
 					p.writeError(errString)
 					p.P(`for {`)
 					p.In()
@@ -223,7 +230,7 @@ func (p *html) Generate(file *generator.FileDescriptor) {
 				}
 			} else {
 				if !m.GetServerStreaming() {
-					p.P(`up, err := this.client.`, generator.CamelCase(m.GetName()), `(`, contextPkg.Use(), `.Background())`)
+					p.P(`up, err := this.client.`, generator.CamelCase(m.GetName()), `(ctx)`)
 					p.writeError(errString)
 					p.P(`err = up.Send(msg)`)
 					p.writeError(errString)
@@ -233,7 +240,7 @@ func (p *html) Generate(file *generator.FileDescriptor) {
 					p.writeError(errString)
 					p.P(`w.Write(out)`)
 				} else {
-					p.P(`bidi, err := this.client.`, generator.CamelCase(m.GetName()), `(`, contextPkg.Use(), `.Background())`)
+					p.P(`bidi, err := this.client.`, generator.CamelCase(m.GetName()), `(ctx)`)
 					p.writeError(errString)
 					p.P(`err = bidi.Send(msg)`)
 					p.writeError(errString)
