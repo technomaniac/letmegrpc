@@ -204,7 +204,7 @@ func (p *html) Generate(file *generator.FileDescriptor) {
 			p.P(`if someValue {`)
 			p.In()
 
-			p.P(`ctx:=`, `(`, contextPkg.Use(), `.Background()`)
+			p.P(`ctx:=`, `(`, contextPkg.Use(), `.Background())`)
 			p.P(`ctx=`, metadataPkg.Use(), fmt.Sprintf(`.AppendToOutgoingContext(ctx, "Authorization", "X-Token %s")`, authToken))
 
 			if !m.GetClientStreaming() {
