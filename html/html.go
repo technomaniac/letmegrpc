@@ -61,7 +61,7 @@ func (p *html) typeName(name string) string {
 }
 
 const errString = `w.Write([]byte("<div class=\"alert alert-danger\" role=\"alert\">" + err.Error() + "</div>"))`
-const authToken = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1MzY4MjY4NDksImlzcyI6ImlvLnpvbmljLmF1dGgiLCJVc2VySUQiOiJjYzUyZjlmYy1mYTgxLTRlODktOGJlMy00Y2M5ZTA2NDg4YzgifQ.h1wqW3mtCauFjpkGjoFbkLf1N9VL4ZNedPoMwja7gTs`
+const authToken = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJpby56b25pYy5hdXRoIiwiVXNlcklEIjoiY2M1MmY5ZmMtZmE4MS00ZTg5LThiZTMtNGNjOWUwNjQ4OGM4In0.1irVD85pDbmFL2A2hKWwMqZ7tGhIctPqcsq3LMAlZcg`
 
 func (p *html) writeError(eof string) {
 	p.P(`if err != nil {`)
